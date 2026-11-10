@@ -3,7 +3,7 @@
   <h1>Notchling</h1>
   <p>A tiny teleprompter that lives in your Mac's notch, right under the camera,<br>so your eyes stay on the lens while you read.</p>
   <br>
-  <img src="assets/hero.png" width="760" alt="Notchling scrolling a script in the notch, under the camera">
+  <img src="assets/hero.png" width="100%" alt="Notchling scrolling a script in the notch, under the camera">
 </div>
 
 <br>
@@ -19,16 +19,12 @@
 - **Scroll to nudge.** Use your trackpad over the notch to move back or ahead, even while it's playing.
 - **Hidden from screen sharing** by default, so viewers don't see your notes.
 
-<br>
-
 <div align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/editor-dark.png">
     <img src="assets/editor-light.png" width="560" alt="The Notchling script editor with speed, text size, width and height controls">
   </picture>
 </div>
-
-<br>
 
 ### Controls
 
