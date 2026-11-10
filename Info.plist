@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key><string>Notchling</string>
+    <key>CFBundleDisplayName</key><string>Notchling</string>
+    <key>CFBundleIdentifier</key><string>com.ztothewang.notchling</string>
+    <key>CFBundleExecutable</key><string>Notchling</string>
+    <key>CFBundleIconFile</key><string>AppIcon</string>
+    <key>CFBundlePackageType</key><string>APPL</string>
+    <key>CFBundleShortVersionString</key><string>1.0</string>
+    <key>CFBundleVersion</key><string>1</string>
+    <key>LSMinimumSystemVersion</key><string>14.0</string>
+    <key>LSApplicationCategoryType</key><string>public.app-category.productivity</string>
+    <key>NSHighResolutionCapable</key><true/>
+    <key>NSMicrophoneUsageDescription</key><string>Notchling listens to your voice so the script can follow along as you speak. Audio stays on your Mac.</string>
+    <key>NSSpeechRecognitionUsageDescription</key><string>Notchling recognizes your speech on-device to keep the script in sync with what you are saying.</string>
+</dict>
+</plist>
