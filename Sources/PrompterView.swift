@@ -8,6 +8,8 @@ final class PrompterView: NSView {
     private let layoutManager = NSLayoutManager()
     private let container = NSTextContainer(size: .zero)
     private let hPad: CGFloat = 22
+    /// Slightly off-white so the text is a touch softer against the black panel.
+    private let textColor = NSColor(white: 0.86, alpha: 1)
 
     /// Normalized script words with their character ranges, for voice following.
     private var words: [(word: String, range: NSRange)] = []
@@ -79,7 +81,7 @@ final class PrompterView: NSView {
         para.paragraphSpacing = size * 0.6
         storage.setAttributedString(NSAttributedString(string: model.script, attributes: [
             .font: NSFont.systemFont(ofSize: size, weight: .semibold),
-            .foregroundColor: NSColor.white,
+            .foregroundColor: textColor,
             .paragraphStyle: para,
         ]))
         container.size = NSSize(width: max(60, bounds.width - hPad * 2), height: .greatestFiniteMagnitude)
@@ -184,9 +186,9 @@ final class PrompterView: NSView {
         guard storage.length > 0 else { return }
         let split = index >= words.count ? storage.length : (index == 0 ? 0 : words[index].range.location)
         storage.beginEditing()
-        storage.addAttribute(.foregroundColor, value: NSColor.white, range: NSRange(location: 0, length: storage.length))
+        storage.addAttribute(.foregroundColor, value: textColor, range: NSRange(location: 0, length: storage.length))
         if split > 0 {
-            storage.addAttribute(.foregroundColor, value: NSColor.white.withAlphaComponent(0.4), range: NSRange(location: 0, length: split))
+            storage.addAttribute(.foregroundColor, value: textColor.withAlphaComponent(0.4), range: NSRange(location: 0, length: split))
         }
         storage.endEditing()
         needsDisplay = true

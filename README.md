@@ -11,7 +11,7 @@
 ### Features
 
 - **Paste and go.** One text box for your script. It's saved between launches.
-- **Lives in the notch.** A black panel that blends into the notch and scrolls your script just below the camera. Displays without a notch get it centered under the menu bar.
+- **Lives in the notch.** A black panel that blends into the notch and scrolls your script just below the camera. Works on any display, too: pick one and slide the prompter left or right to sit under your webcam.
 - **Readable text.** Adjustable text size (14–48 pt), panel width, and height.
 - **Steady scrolling** at a speed you set (5–200 pt/s).
 - **Voice mode.** Optional mode that keeps your place in the script as you speak, using on-device speech recognition. Lines you've already read dim out.

@@ -3,6 +3,7 @@ import SwiftUI
 struct EditorView: View {
     @Bindable var model: PrompterModel
     let controller: NotchController
+    @State private var screens = NSScreen.screens
 
     /// Height of the header, which sits in the transparent title bar beside the traffic lights.
     static let headerHeight: CGFloat = 52
@@ -96,6 +97,15 @@ struct EditorView: View {
                     SettingSlider(symbol: "arrow.up.and.down", help: "Prompter height",
                                   value: $model.panelHeight, range: 60...400, unit: "pt")
                 }
+                GridRow {
+                    SettingSlider(symbol: "arrow.left.arrow.right.square", help: "Position: slide left or right of center",
+                                  value: offsetBinding, range: -800...800, unit: "pt",
+                                  format: { $0 == 0 ? "Center" : $0 < 0 ? "← \(Int(-$0))" : "\(Int($0)) →" })
+                    displayPicker
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSApplication.didChangeScreenParametersNotification)) { _ in
+                screens = NSScreen.screens
             }
 
             HStack(spacing: 14) {
@@ -131,6 +141,30 @@ struct EditorView: View {
         .overlay(alignment: .top) { Divider().opacity(0.6) }
     }
 
+    /// Snaps to center near zero so it's easy to get back.
+    private var offsetBinding: Binding<Double> {
+        Binding(get: { model.horizontalOffset },
+                set: { model.horizontalOffset = abs($0) < 15 ? 0 : $0.rounded() })
+    }
+
+    private var displayPicker: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "display")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(.secondary)
+                .frame(width: 18)
+            Picker("Display", selection: $model.displayID) {
+                Text("Automatic").tag(0)
+                ForEach(screens, id: \.displayID) { screen in
+                    Text(screen.localizedName).tag(screen.displayID)
+                }
+            }
+            .labelsHidden()
+            .controlSize(.small)
+        }
+        .help("Display to show the prompter on")
+    }
+
     private var stats: String {
         let words = model.script.split { $0.isWhitespace || $0.isNewline }.count
         let minutes = max(1, Int((Double(words) / 150).rounded()))
@@ -164,6 +198,7 @@ private struct SettingSlider: View {
     @Binding var value: Double
     let range: ClosedRange<Double>
     let unit: String
+    var format: ((Double) -> String)? = nil
 
     var body: some View {
         HStack(spacing: 10) {
@@ -173,7 +208,7 @@ private struct SettingSlider: View {
                 .frame(width: 18)
             Slider(value: $value, in: range)
                 .controlSize(.small)
-            Text("\(Int(value)) \(unit)")
+            Text(format?(value) ?? "\(Int(value)) \(unit)")
                 .font(.system(size: 11.5).monospacedDigit())
                 .foregroundStyle(.secondary)
                 .frame(width: 52, alignment: .trailing)

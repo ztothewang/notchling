@@ -94,14 +94,30 @@ final class NotchController {
     /// Places the panel flush with the top of the notched display, centered on
     /// the camera. Displays without a notch get it just below the menu bar.
     private func position() {
-        guard let screen = NSScreen.screens.first(where: { $0.safeAreaInsets.top > 0 }) ?? NSScreen.main else { return }
-        let notch = screen.safeAreaInsets.top
-        let width = CGFloat(model.panelWidth)
+        let chosen = model.displayID == 0 ? nil : NSScreen.screens.first { $0.displayID == model.displayID }
+        guard let screen = chosen ?? NSScreen.screens.first(where: { $0.safeAreaInsets.top > 0 }) ?? NSScreen.main else { return }
+        let frame = screen.frame
+        let width = min(CGFloat(model.panelWidth), frame.width)
+        let x = min(max(frame.midX - width / 2 + CGFloat(model.horizontalOffset), frame.minX), frame.maxX - width)
+
+        // Hang from the top edge only while the panel still covers the notch;
+        // slid past it, sit below the menu bar like on any other display.
+        var notch = screen.safeAreaInsets.top
+        if notch > 0, let left = screen.auxiliaryTopLeftArea, let right = screen.auxiliaryTopRightArea {
+            let notchMinX = frame.minX + left.width, notchMaxX = frame.maxX - right.width
+            if x > notchMinX + 1 || x + width < notchMaxX - 1 { notch = 0 }
+        }
         let height = CGFloat(model.panelHeight) + notch
-        let top = notch > 0 ? screen.frame.maxY : screen.visibleFrame.maxY
+        let top = notch > 0 ? frame.maxY : screen.visibleFrame.maxY
         view.notchHeight = notch
         panel.sharingType = model.hideFromScreenShare ? .none : .readOnly
-        panel.setFrame(NSRect(x: screen.frame.midX - width / 2, y: top - height, width: width, height: height), display: true)
+        panel.setFrame(NSRect(x: x, y: top - height, width: width, height: height), display: true)
+    }
+}
+
+extension NSScreen {
+    var displayID: Int {
+        (deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber)?.intValue ?? 0
     }
 }
 

@@ -31,6 +31,10 @@ final class PrompterModel {
     var fontSize: Double { didSet { Self.defaults.set(fontSize, forKey: "fontSize"); onChange?(.layout) } }
     var panelWidth: Double { didSet { Self.defaults.set(panelWidth, forKey: "panelWidth"); onChange?(.layout) } }
     var panelHeight: Double { didSet { Self.defaults.set(panelHeight, forKey: "panelHeight"); onChange?(.layout) } }
+    /// Horizontal shift from the center of the display, in points.
+    var horizontalOffset: Double { didSet { Self.defaults.set(horizontalOffset, forKey: "horizontalOffset"); onChange?(.layout) } }
+    /// Display to show the prompter on; 0 picks the notched display, else the main one.
+    var displayID: Int { didSet { Self.defaults.set(displayID, forKey: "displayID"); onChange?(.layout) } }
     var hideFromScreenShare: Bool { didSet { Self.defaults.set(hideFromScreenShare, forKey: "hideFromScreenShare"); onChange?(.layout) } }
     var appearance: AppAppearance { didSet { Self.defaults.set(appearance.rawValue, forKey: "appearance"); applyAppearance() } }
     var mode: ScrollMode { didSet { Self.defaults.set(mode.rawValue, forKey: "mode"); onChange?(.mode) } }
@@ -49,6 +53,8 @@ final class PrompterModel {
         panelWidth = d.object(forKey: "panelWidth") as? Double ?? 460
         panelHeight = d.object(forKey: "panelHeight") as? Double ?? 130
         hideFromScreenShare = d.object(forKey: "hideFromScreenShare") as? Bool ?? true
+        horizontalOffset = d.double(forKey: "horizontalOffset")
+        displayID = d.integer(forKey: "displayID")
         mode = ScrollMode(rawValue: d.string(forKey: "mode") ?? "") ?? .steady
         appearance = AppAppearance(rawValue: d.string(forKey: "appearance") ?? "") ?? .system
     }
